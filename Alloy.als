@@ -52,18 +52,15 @@ pred nLogin {
   #LoginService > 0
 }
 
-// Menambahkan predikat untuk mengecek apakah suatu PencariKerja sudah login
 pred PencariKerjaSudahLogin[pk: PencariKerja, ls: LoginService] {
   ls.lusername in pk.username
   ls.password in pk.password
 }
 
-// Menambahkan predikat untuk mengecek apakah suatu ApplicantsForm dapat diakses oleh PencariKerja yang sudah login
 pred ApplicantsFormDapatDiakses[af: ApplicantsForm, pk: PencariKerja, ls: LoginService] {
   PencariKerjaSudahLogin[pk, ls]
 }
 
-// Aturan baru untuk mengecek apakah ApplicantsForm dapat diakses
 assert ApplicantsFormHanyaDapatDiaksesJikaLogin {
   all af: ApplicantsForm, l: Lowongan | 
     (af in l.listOfPendaftars) implies (some pk: PencariKerja, ls: LoginService | ApplicantsFormDapatDiakses[af, pk, ls])
@@ -91,7 +88,6 @@ assert lowonganUnique {
   // Nama setiap Lowongan harus unik
   all disj L1, L2, L3: Lowongan | L1.lowongan != L2.lowongan && L1.lowongan != L3.lowongan && L2.lowongan != L3.lowongan
 }
-
 
 run {} for 3 
 check punyaCV for 3
