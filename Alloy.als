@@ -14,7 +14,7 @@ sig LoginService {
 
 sig Lowongan {
   lowongan: Text,
-  listOfPendaftars: one ApplicantsForm,
+  listOfPendaftars: set ApplicantsForm,
 }
 
 sig ApplicantsForm {
@@ -44,11 +44,11 @@ pred nApplicants {
 }
 
 pred nCV {
-  #CV > 0
+  #CV = 1
 }
 
 pred nLogin {
-  #LoginService > 0
+  #LoginService = 1
 }
 
 pred PencariKerjaSudahLogin[pk: PencariKerja, ls: LoginService] {
@@ -60,7 +60,7 @@ pred ApplicantsFormDapatDiakses[af: ApplicantsForm, pk: PencariKerja, ls: LoginS
   PencariKerjaSudahLogin[pk, ls]
 }
 
-assert ApplicantsFormHanyaDapatDiaksesJikaLogin {
+assert LoginSebelumLamar {
   all af: ApplicantsForm, l: Lowongan | 
     (af in l.listOfPendaftars) implies (some pk: PencariKerja, ls: LoginService | ApplicantsFormDapatDiakses[af, pk, ls])
 }
@@ -74,12 +74,10 @@ fact {
 }
 
 assert punyaCV {
-  // Semua applicants form memiliki CV di dalamnya
   all C: ApplicantsForm | C.cv in CV
 }
 
 assert punyaPelamar {
-  // Setiap lowongan memiliki satu pendaftar
   all L: Lowongan | one P: L.listOfPendaftars | P in ApplicantsForm
 }
 
@@ -92,4 +90,4 @@ run {} for 3
 check punyaCV for 3
 check punyaPelamar for 3
 check lowonganUnique for 3
-check ApplicantsFormHanyaDapatDiaksesJikaLogin for 3
+check LoginSebelumLamar for 3
