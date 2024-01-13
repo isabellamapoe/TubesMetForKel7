@@ -1,5 +1,4 @@
 sig Text {}
-sig bool {}
 sig EncryptedText {}
 
 sig PencariKerja {
