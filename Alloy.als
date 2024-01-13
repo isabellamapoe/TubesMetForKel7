@@ -73,6 +73,11 @@ fact {
   nLowongan && nApplicants && nCV && nLogin
 }
 
+fact nomortelepon {
+  all n : CV | n.nomorTelepon > 0
+   all d : ApplicantsForm | d. kontakDarurat> 0
+}
+
 assert punyaCV {
   all C: ApplicantsForm | C.cv in CV
 }
